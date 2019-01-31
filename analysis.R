@@ -1,17 +1,31 @@
-library(dplyr)
-library(spBayes)
-library(ggplot2)
+site_index = commandArgs(trailingOnly = TRUE)
 
-frm = readr::read_csv("data/frm.csv") %>%
-  mutate(
-    day = (as.Date(date) - as.Date("2007/1/1")) %>% as.integer()
-  ) %>%
-  select(site, day, pm25) %>%
-  arrange(site, day)
-
-sites = frm$site %>% unique()
-
-for(cur_site in sites) {
+{
+  if (length(site_index) != 1) {
+    stop("Provide only one index")
+  }
+  
+  
+  library(dplyr)
+  library(spBayes)
+  library(ggplot2)
+  
+  frm = readr::read_csv("data/frm.csv") %>%
+    mutate(
+      day = (as.Date(date) - as.Date("2007/1/1")) %>% as.integer()
+    ) %>%
+    select(site, day, pm25) %>%
+    arrange(site, day)
+  
+  sites = frm$site %>% unique()
+  
+  site_index = as.integer(site_index)
+  
+  stopifnot(!is.na(site_index))
+  stopifnot(site_index %in% seq_along(sites))
+  
+  
+  cur_site = sites[site_index]
   
   site_data = frm %>% filter(site == cur_site)
   
@@ -28,7 +42,7 @@ for(cur_site in sites) {
   n_iter = nrow(lm$p.theta.samples)
   start = n_iter/2+1
   thin = (n_iter/2)/2500
-
+  
   day_pred = jitter(0:364,0.001)
   lm_pred = spPredict(
     lm, cbind(x = day_pred, y = 0), 
@@ -37,10 +51,10 @@ for(cur_site in sites) {
   )
   
   df_pred = tibble(
-      day = day_pred,
-      pm25_mean = apply(lm_pred$p.y.predictive.samples, 1, mean),
-      pm25_med  = apply(lm_pred$p.y.predictive.samples, 1, median)
-    )
+    day = day_pred,
+    pm25_mean = apply(lm_pred$p.y.predictive.samples, 1, mean),
+    pm25_med  = apply(lm_pred$p.y.predictive.samples, 1, median)
+  )
   
   results_dir = file.path("results/",cur_site)
   dir.create(results_dir, recursive = TRUE, showWarnings = FALSE)
@@ -57,6 +71,4 @@ for(cur_site in sites) {
       geom_path(data = site_data, color="red", aes(y=pm25))
   )
   dev.off()
-  
-  break
 }

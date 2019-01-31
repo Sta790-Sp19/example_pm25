@@ -1,0 +1,3 @@
+FROM rundel/ex_pm25
+
+RUN install2.r tidybayes
