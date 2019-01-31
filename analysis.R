@@ -28,9 +28,7 @@ for(cur_site in sites) {
   n_iter = nrow(lm$p.theta.samples)
   start = n_iter/2+1
   thin = (n_iter/2)/2500
-  
-  #lm_rec = spRecover(lm, start = start, thin = thin)
-  
+
   day_pred = jitter(0:364,0.001)
   lm_pred = spPredict(
     lm, cbind(x = day_pred, y = 0), 
