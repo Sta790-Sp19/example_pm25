@@ -45,7 +45,8 @@
   
   start = Sys.time()
   
-  z = parallel::mclapply(seq_len(n_iter), fit, mc.cores = n_parallel)
+  #z = parallel::mclapply(seq_len(n_iter), fit, mc.cores = n_parallel)
+  z = fit(1)
   
   end = Sys.time()
   
