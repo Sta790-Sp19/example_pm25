@@ -15,7 +15,7 @@
       function(x) {
         system.time(z%*%z)
       }, 
-      mc.cores = 1
+      mc.cores = n_parallel
     )
   )
   
