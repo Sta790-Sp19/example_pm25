@@ -1,11 +1,12 @@
 {
   args = commandArgs(trailingOnly = TRUE)
   stopifnot(length(args) %in% c(2,3))
-  
+
   n_iter = args[1]
   n_parallel = args[2]
-  if (!is.null(args[3]))
+  if (!is.null(args[3])) {
     n_cores = args[3]
+  } 
   
   suppressMessages( library(dplyr) )
   suppressMessages( library(spBayes) )
@@ -45,8 +46,7 @@
   
   start = Sys.time()
   
-  #z = parallel::mclapply(seq_len(n_iter), fit, mc.cores = n_parallel)
-  z = fit(1)
+  z = parallel::mclapply(seq_len(n_iter), fit, mc.cores = n_parallel)
   
   end = Sys.time()
   
