@@ -25,7 +25,7 @@
   
   print(
     parallel::mclapply(
-      seq_len(niter), 
+      seq_len(n_iter), 
       function(x) {
         system.time(chol(cov))
       }, 
