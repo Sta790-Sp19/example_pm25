@@ -23,12 +23,14 @@
   
   start = Sys.time()
   
-  parallel::mclapply(
-    seq_len(niter), 
-    function(x) {
-      system.time(chol(cov))
-    }, 
-    mc.cores = n_parallel
+  print(
+    parallel::mclapply(
+      seq_len(niter), 
+      function(x) {
+        system.time(chol(cov))
+      }, 
+      mc.cores = n_parallel
+    )
   )
   
   end = Sys.time()

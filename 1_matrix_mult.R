@@ -9,12 +9,14 @@
   
   start = Sys.time()
   
-  parallel::mclapply(
-    seq_len(n_iter), 
-    function(x) {
-      system.time(z%*%z)
-    }, 
-    mc.cores = 1
+  print(
+    parallel::mclapply(
+      seq_len(n_iter), 
+      function(x) {
+        system.time(z%*%z)
+      }, 
+      mc.cores = 1
+    )
   )
   
   end = Sys.time()
