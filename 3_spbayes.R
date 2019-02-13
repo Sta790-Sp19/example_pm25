@@ -10,7 +10,6 @@
   
   suppressMessages( library(dplyr) )
   suppressMessages( library(spBayes) )
-  suppressMessages( library(ggplot2) )
   
   frm = suppressMessages(readr::read_csv("data/frm.csv")) %>%
     mutate(
